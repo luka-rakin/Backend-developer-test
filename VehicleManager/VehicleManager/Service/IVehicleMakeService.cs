@@ -1,13 +1,13 @@
 ﻿using VehicleManager.Models;
 
-namespace VehicleManager.Repository
+namespace VehicleManager.Service
 {
-    public interface IVehicleMakeRepository
+    public interface IVehicleMakeService
     {
         public Task<int> Add(VehicleMake vehicleMake);
         public Task<VehicleMake> GetById(int id);
         public Task<List<VehicleMake>> GetAll();
-        public Task<bool> Update(int id, VehicleMake vehicleMake);
-        public Task<bool> Delete(int id);
+        public Task Update(int id, VehicleMake vehicleMake);
+        public Task Delete(int id);
     }
 }

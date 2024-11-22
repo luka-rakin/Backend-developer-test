@@ -2,20 +2,31 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManager.Models;
 using VehicleManager.Repository;
+using VehicleManager.Service;
 
 namespace VehicleManager.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IVehicleMakeService _vehicleMakeService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IVehicleMakeService vehicleMakeService)
         {
             _logger = logger;
+            _vehicleMakeService = vehicleMakeService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            VehicleMake vehicleMake = new VehicleMake
+            {
+                Name = "Volkswagen",
+                Abrv = "VW"
+            };
+
+            await _vehicleMakeService.Add(vehicleMake);
+
             return View();
         }
 
