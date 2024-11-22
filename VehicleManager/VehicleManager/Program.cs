@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Ninject;
+using Ninject.Extensions.DependencyInjection;
+using Ninject.Web.Common;
 using VehicleManager;
 using VehicleManager.Repository;
+using VehicleManager.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +13,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Host.UseServiceProviderFactory(new NinjectServiceProviderFactory(kernel =>
+{
 
-//Repository
-builder.Services.AddScoped<IVehicleMakeRepository, VehicleMakeRepository>();
-
-
-//Service
+    kernel.Bind<IVehicleMakeRepository>().To<VehicleMakeRepository>().InRequestScope();
+    kernel.Bind<IVehicleMakeService>().To<VehicleMakeService>().InRequestScope();
+}));
 
 var app = builder.Build();
 
