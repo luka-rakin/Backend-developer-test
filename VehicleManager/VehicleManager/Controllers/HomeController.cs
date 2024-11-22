@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using VehicleManager.DTO;
 using VehicleManager.Models;
 using VehicleManager.Repository;
 using VehicleManager.Service;
@@ -19,7 +20,7 @@ namespace VehicleManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            VehicleMake vehicleMake = new VehicleMake
+            VehicleMakeDto vehicleMake = new VehicleMakeDto
             {
                 Name = "Volkswagen",
                 Abrv = "VW"
