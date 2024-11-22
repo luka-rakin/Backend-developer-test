@@ -400,6 +400,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 appsettings.json
-/migrations/
+/VehicleManager/Migrations/
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp
