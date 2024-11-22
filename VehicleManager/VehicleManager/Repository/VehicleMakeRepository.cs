@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
+using VehicleManager.DTO;
 using VehicleManager.Models;
 
 namespace VehicleManager.Repository
@@ -44,6 +46,32 @@ namespace VehicleManager.Repository
         public async Task<VehicleMake> GetById(int id)
         {
             return await _context.vehicleMakes.FirstOrDefaultAsync(v => v.Id == id);
+        }
+
+        public async Task<PagedResult<VehicleMake>> GetPaged(int pageNumber, int pageSize)
+        {
+            int totalCount = _context.vehicleMakes.Count();
+
+            if(pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            var vehicleMakes = await _context.vehicleMakes
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            return new PagedResult<VehicleMake>
+            {
+                Items = vehicleMakes,
+                TotalPages = totalPages,
+                TotalCount = totalCount,
+                CurrentPage = pageNumber,
+                PageSize = pageSize
+            };       
         }
 
         public async Task<bool> Update(int id, VehicleMake vehicleMake)

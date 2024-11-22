@@ -1,4 +1,5 @@
-﻿using VehicleManager.Models;
+﻿using VehicleManager.DTO;
+using VehicleManager.Models;
 using VehicleManager.Repository;
 
 namespace VehicleManager.Service
@@ -38,6 +39,11 @@ namespace VehicleManager.Service
             }
 
             return vehicleMake;
+        }
+
+        public async Task<PagedResult<VehicleMake>> GetPaged(int pageNumber, int pageSize)
+        {
+            return await _vehicleMakeRepository.GetPaged(pageNumber, pageSize);
         }
 
         public async Task Update(int id, VehicleMake vehicleMake)
