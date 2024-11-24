@@ -56,7 +56,7 @@ namespace VehicleManager.Service
             var vehicleMake = await _vehicleMakeRepository.GetById(id);
             if(vehicleMake == null)
             {
-                throw new Exception($"Vehicle with id {id} does not exist.");
+                throw new Exception($"Vehicle make with id {id} does not exist.");
             }
 
             return _mapper.Map<VehicleMakeDto>(vehicleMake);
