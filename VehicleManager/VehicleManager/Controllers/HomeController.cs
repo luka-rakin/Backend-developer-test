@@ -18,23 +18,29 @@ namespace VehicleManager.Controllers
             _vehicleMakeService = vehicleMakeService;
         }
 
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> VehicleMake()
         {
-            VehicleMakeDto vehicleMake = new VehicleMakeDto
-            {
-                Name = "Volkswagen",
-                Abrv = "VW"
-            };
-
-            await _vehicleMakeService.Add(vehicleMake);
-
-            return View();
+            var allVehicleMakes = await _vehicleMakeService.GetAll();
+            return View(allVehicleMakes);
         }
 
-        public IActionResult Privacy()
+        public IActionResult VehicleModel()
         {
             return View();
         }
+
+        public IActionResult VehicleMakeForm()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> AddVehicleMake(VehicleMakeDto model)
+        {
+            await _vehicleMakeService.Add(model);
+            return RedirectToAction("VehicleMake");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

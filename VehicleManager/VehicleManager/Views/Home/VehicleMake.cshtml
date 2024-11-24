@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Vehicle make";
+}
+
+@model List<VehicleManager.DTO.VehicleMakeDto>
+
+<div class="text-center">
+    <h1 class="display-4">Vehicle make</h1>
+    <hr/>
+    <a asp-controller="Home" asp-action="VehicleMakeForm" class="btn btn-primary mt-3">+ Add new vehicle make</a>
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Abr</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(var vehicleMake in Model){
+                        <tr>
+                            <td>@vehicleMake.Name</td>
+                            <td>@vehicleMake.Abrv</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Add vehicle make";
+}
+
+@model VehicleManager.DTO.VehicleMakeDto
+
+<div class="container mt-5">
+    <h2>Vehicle make form</h2>
+    <form asp-controller="Home" asp-action="AddVehicleMake">
+        <div class="col">
+            <div class="col-md-6 mb-2" >
+                <label>Name</label>
+                <input asp-for="Name" type="text" class="form-control" placeholder="e.g. Volkswagen" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>Abrv</label>
+                <input asp-for="Abrv" type="text" class="form-control" placeholder="e.g. VW" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-4">Add vehicle make</button>
+    </form>
+</div>
