@@ -38,7 +38,7 @@ namespace VehicleManager.Repository
 
             if(vehicleMake == null)
             {
-                return false;
+                throw new Exception("The vehicle make with the given id does not exist.");
             }
 
             _context.vehicleMakes.Remove(vehicleMake);

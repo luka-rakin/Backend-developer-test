@@ -20,7 +20,7 @@
 <div class="text-center">
     <h1 class="display-4">Vehicle model</h1>
     <hr />
-    <a asp-controller="Home" asp-action="VehicleModelForm" class="btn btn-primary mt-3">+ Add new vehicle model</a>
+    <a asp-controller="VehicleModel" asp-action="VehicleModelForm" class="btn btn-primary mt-3">+ Add new vehicle model</a>
     <hr/>
 
     <div class="d-flex flex-row">
@@ -119,7 +119,7 @@
                             <td>@vehicleModel.Make</td>
                             <td>@vehicleModel.Abrv</td>
                             <td>
-                                <form asp-asp-controller="Home" asp-action="DeleteVehicleModel">
+                                <form asp-asp-controller="VehicleModel" asp-action="DeleteVehicleModel">
                                     <input type="hidden" name="id" value="@vehicleModel.Id"/>
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>

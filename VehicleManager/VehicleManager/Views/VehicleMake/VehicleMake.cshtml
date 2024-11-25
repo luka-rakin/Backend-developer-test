@@ -18,7 +18,7 @@
 <div class="text-center">
     <h1 class="display-4">Vehicle make</h1>
     <hr/>
-    <a asp-controller="Home" asp-action="VehicleMakeForm" class="btn btn-primary mt-3">+ Add new vehicle make</a>
+    <a asp-controller="VehicleMake" asp-action="VehicleMakeForm" class="btn btn-primary mt-3">+ Add new vehicle make</a>
 
 
     
@@ -76,7 +76,7 @@
                             <td>@vehicleMake.Name</td>
                             <td>@vehicleMake.Abrv</td>
                             <td>
-                                <form asp-controller="Home" asp-action="DeleteVehicleMake">
+                                <form asp-controller="VehicleMake" asp-action="DeleteVehicleMake">
                                     <input type="hidden" name="id" value="@vehicleMake.Id"/>
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>

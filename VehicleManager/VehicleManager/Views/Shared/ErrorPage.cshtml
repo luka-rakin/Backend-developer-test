@@ -1,0 +1,10 @@
+﻿
+@{
+	ViewData["Title"] = "Error";
+
+	var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+<div class="alert alert-danger">
+	@errorMessage
+</div>

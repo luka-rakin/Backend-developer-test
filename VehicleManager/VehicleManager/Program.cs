@@ -40,6 +40,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=VehicleMake}/{id?}");
+    pattern: "{controller=VehicleMake}/{action=VehicleMake}/{id?}");
 
 app.Run();
