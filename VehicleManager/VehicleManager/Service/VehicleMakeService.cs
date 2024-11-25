@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using VehicleManager.DTO;
+using VehicleManager.Enums;
 using VehicleManager.Models;
 using VehicleManager.Repository;
 
@@ -34,10 +35,10 @@ namespace VehicleManager.Service
             return _mapper.Map<List<VehicleMakeDto>>(vehicleMakes);
         }
 
-        public async Task<PagedResult<VehicleMakeDto>> GetPaged(int pageNumber, int pageSize)
+        public async Task<PagedResult<VehicleMakeDto>> GetPaged(int pageNumber, int pageSize, MakeSortOptions sortOption)
         {
 
-            var result = await _vehicleMakeRepository.GetPaged(pageNumber, pageSize);
+            var result = await _vehicleMakeRepository.GetPaged(pageNumber, pageSize, sortOption);
             List<VehicleMakeDto> vehicleMarkDtos = _mapper.Map<List<VehicleMakeDto>>(result.Items);
 
             return new PagedResult<VehicleMakeDto>

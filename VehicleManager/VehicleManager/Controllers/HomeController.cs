@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManager.DTO;
+using VehicleManager.Enums;
 using VehicleManager.Models;
 using VehicleManager.Repository;
 using VehicleManager.Service;
@@ -21,16 +22,31 @@ namespace VehicleManager.Controllers
         }
 
 
-        public async Task<IActionResult> VehicleMake()
+        public async Task<IActionResult> VehicleMake(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
         {
-            var allVehicleMakes = await _vehicleMakeService.GetAll();
-            return View(allVehicleMakes);
+            if(Enum.TryParse(sortBy, out MakeSortOptions makeSortOption))
+            {
+                var pagedVehicleMakes = await _vehicleMakeService.GetPaged(pageNumber, pageSize, makeSortOption);
+                return View(pagedVehicleMakes);
+            }
+            else
+            {
+                throw new Exception("Unsuported sorting value");
+            }
+            
         }
 
-        public async Task<IActionResult> VehicleModel()
+        public async Task<IActionResult> VehicleModel(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
         {
-            var vehicleModels = await _vehicleModelService.GetAll();
-            return View(vehicleModels);
+            if (Enum.TryParse(sortBy, out ModelSortOptions modelSortOption))
+            {
+                var pagedVehicleModels = await _vehicleModelService.GetPaged(pageNumber, pageSize, modelSortOption);
+                return View(pagedVehicleModels);
+            }
+            else
+            {
+                throw new Exception("Unsuported sorting value");
+            }
         }
 
         public IActionResult VehicleMakeForm()

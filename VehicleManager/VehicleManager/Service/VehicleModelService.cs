@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using VehicleManager.DTO;
+using VehicleManager.Enums;
 using VehicleManager.Models;
 using VehicleManager.Repository;
 
@@ -53,10 +54,10 @@ namespace VehicleManager.Service
             return _mapper.Map<VehicleModelDto>(vehicleModel);
         }
 
-        public async Task<PagedResult<VehicleModelDto>> GetPaged(int pageNumber, int pageSize)
+        public async Task<PagedResult<VehicleModelDto>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOptions)
         {
-            var result = await _vehicleModelRepository.GetPaged(pageNumber, pageSize);
-            List<VehicleModelDto> vehicleModelDtos = _mapper.Map<List<VehicleModelDto>>(result);
+            var result = await _vehicleModelRepository.GetPaged(pageNumber, pageSize, sortOptions);
+            List<VehicleModelDto> vehicleModelDtos = _mapper.Map<List<VehicleModelDto>>(result.Items);
 
 
             return new PagedResult<VehicleModelDto>

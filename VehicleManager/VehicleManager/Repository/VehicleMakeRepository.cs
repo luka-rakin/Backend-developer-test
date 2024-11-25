@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
 using VehicleManager.DTO;
+using VehicleManager.Enums;
 using VehicleManager.Models;
 
 namespace VehicleManager.Repository
@@ -40,7 +42,9 @@ namespace VehicleManager.Repository
 
         public async Task<List<VehicleMake>> GetAll()
         {
-            return await _context.vehicleMakes.ToListAsync();
+            return await _context.vehicleMakes
+                .OrderBy(v => v.Name)
+                .ToListAsync();
         }
 
         public async Task<VehicleMake> GetById(int id)
@@ -48,7 +52,7 @@ namespace VehicleManager.Repository
             return await _context.vehicleMakes.FirstOrDefaultAsync(v => v.Id == id);
         }
 
-        public async Task<PagedResult<VehicleMake>> GetPaged(int pageNumber, int pageSize)
+        public async Task<PagedResult<VehicleMake>> GetPaged(int pageNumber, int pageSize, MakeSortOptions sortOption)
         {
             int totalCount = _context.vehicleMakes.Count();
 
@@ -57,10 +61,42 @@ namespace VehicleManager.Repository
                 pageNumber = 1;
             }
 
-            var vehicleMakes = await _context.vehicleMakes
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            List<VehicleMake> vehicleMakes = new List<VehicleMake>();
+
+            switch (sortOption)
+            {
+                case MakeSortOptions.NameDesc:
+                    vehicleMakes = await _context.vehicleMakes
+                        .OrderByDescending(v => v.Name)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+                    break;
+
+                case MakeSortOptions.AbrvAsc:
+                    vehicleMakes = await _context.vehicleMakes
+                        .OrderBy (v => v.Abrv)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+                break;
+
+                case MakeSortOptions.AbrvDesc:
+                    vehicleMakes = await _context.vehicleMakes
+                        .OrderByDescending(v => v.Abrv)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+                    break;
+
+                default:
+                    vehicleMakes = await _context.vehicleMakes
+                        .OrderBy(v => v.Name)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+                    break;
+            }
 
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
