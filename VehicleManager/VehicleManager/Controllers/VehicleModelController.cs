@@ -34,14 +34,18 @@ namespace VehicleManager.Controllers
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = $"Error: Unsuported sorting value";
-                    return View("~/Views/Shared/ErrorPage.cshtml");
+                    //TempData["ErrorMessage"] = $"Error: Unsuported sorting value";
+                    //return View("~/Views/Shared/ErrorPage.cshtml");
+
+                    return BadRequest(new { Message = "Unsupported sorting value." });
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"An unexpected error occured.";
-                return View("~/Views/Shared/ErrorPage.cshtml");
+                //TempData["ErrorMessage"] = $"An unexpected error occured.";
+                //return View("~/Views/Shared/ErrorPage.cshtml");
+
+                return StatusCode(500, new { Message = "An unexpected error occured." });
             }
             
         }
@@ -55,8 +59,10 @@ namespace VehicleManager.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"An unexpected error occured.";
-                return View("~/Views/Shared/ErrorPage.cshtml");
+                //TempData["ErrorMessage"] = $"An unexpected error occured.";
+                //return View("~/Views/Shared/ErrorPage.cshtml");
+
+                return StatusCode(500, new { Message = "An unexpected error occured." });
             }
 
             
@@ -71,8 +77,10 @@ namespace VehicleManager.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"An unexpected error occured.";
-                return View("~/Views/Shared/ErrorPage.cshtml");
+                //TempData["ErrorMessage"] = $"An unexpected error occured.";
+                //return View("~/Views/Shared/ErrorPage.cshtml");
+
+                return StatusCode(500, new { Message = "An unexpected error occured." });
             }
 
             
@@ -96,8 +104,10 @@ namespace VehicleManager.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"An unexpected error occured.";
-                return View("~/Views/Shared/ErrorPage.cshtml");
+                //TempData["ErrorMessage"] = $"An unexpected error occured.";
+                //return View("~/Views/Shared/ErrorPage.cshtml");
+
+                return StatusCode(500, new { Message = "An unexpected error occured." });
             }
             
         }
