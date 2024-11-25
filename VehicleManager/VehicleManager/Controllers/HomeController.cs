@@ -77,6 +77,37 @@ namespace VehicleManager.Controllers
             return RedirectToAction("VehicleMake");
         }
 
+        public async Task<IActionResult> DeleteVehicleMake(int id)
+        {
+            var result = await _vehicleMakeService.Delete(id);
+            if (!result)
+            {
+                TempData["ErrorMessage"] = $"You cannot remove a vehicle make that has an associated vehicle model.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Vehicle make deleted successfully!";
+            }
+
+            return RedirectToAction("VehicleMake");
+
+        }
+
+        public async Task<IActionResult> DeleteVehicleModel(int id)
+        {
+            var result = await _vehicleModelService.Delete(id);
+            if (!result)
+            {
+                TempData["ErrorMessage"] = $"An error occurred while deleting the vehicle model";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Vehicle model deleted successfully!";
+            }
+
+            return RedirectToAction("VehicleModel");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -27,6 +27,13 @@ namespace VehicleManager.Repository
 
         public async Task<bool> Delete(int id)
         {
+            bool hasRelatedVehicleModels = await _context.vehicleModels.AnyAsync(vm => vm.VehicleMakeId == id);
+
+            if (hasRelatedVehicleModels)
+            {
+                return false;
+            }
+
             var vehicleMake = await _context.vehicleMakes.FindAsync(id);
 
             if(vehicleMake == null)

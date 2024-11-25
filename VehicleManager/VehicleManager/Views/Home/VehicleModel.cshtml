@@ -11,6 +11,9 @@
         { "MakeAsc", "Sort by Make (A-Z)" },
         { "MakeDesc", "Sort by Make (Z-A)" }
     };
+
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 @model VehicleManager.DTO.PagedResult<VehicleManager.DTO.VehicleModelDto>
 
@@ -115,6 +118,12 @@
                             <td>@vehicleModel.Name</td>
                             <td>@vehicleModel.Make</td>
                             <td>@vehicleModel.Abrv</td>
+                            <td>
+                                <form asp-asp-controller="Home" asp-action="DeleteVehicleModel">
+                                    <input type="hidden" name="id" value="@vehicleModel.Id"/>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 }
@@ -146,6 +155,20 @@
             </ul>
         </nav>
     </div>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">
+            @successMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
 
 
 </div>

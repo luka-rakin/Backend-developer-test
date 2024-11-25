@@ -8,6 +8,9 @@
         { "AbrvAsc", "Sort by Abrv (A-Z)" },
         { "AbrvDesc", "Sort by Abrv (Z-A)" }
     };
+
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 
 @model VehicleManager.DTO.PagedResult<VehicleManager.DTO.VehicleMakeDto>
@@ -63,6 +66,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Abrv</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +75,12 @@
                         <tr>
                             <td>@vehicleMake.Name</td>
                             <td>@vehicleMake.Abrv</td>
+                            <td>
+                                <form asp-controller="Home" asp-action="DeleteVehicleMake">
+                                    <input type="hidden" name="id" value="@vehicleMake.Id"/>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 }
@@ -102,5 +112,19 @@
             </ul>
         </nav>
     </div>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">
+            @successMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
 
 </div>

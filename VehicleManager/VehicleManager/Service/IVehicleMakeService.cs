@@ -11,6 +11,6 @@ namespace VehicleManager.Service
         public Task<List<VehicleMakeDto>> GetAll();
         public Task<PagedResult<VehicleMakeDto>> GetPaged(int pageNumber, int pageSize, MakeSortOptions sortOption);
         public Task Update(int id, VehicleMakeDto vehicleMakeDto);
-        public Task Delete(int id);
+        public Task<bool> Delete(int id);
     }
 }

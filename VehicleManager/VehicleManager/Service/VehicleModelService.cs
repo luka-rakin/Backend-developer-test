@@ -33,13 +33,9 @@ namespace VehicleManager.Service
             return await _vehicleModelRepository.Add(vehicleModel);
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var result = await _vehicleModelRepository.Delete(id);
-            if(!result)
-            {
-                throw new Exception("An error occurred while deleting the vehicle model");
-            }
+            return await _vehicleModelRepository.Delete(id);
         }
 
         public async Task<List<VehicleModelDto>> GetAll()

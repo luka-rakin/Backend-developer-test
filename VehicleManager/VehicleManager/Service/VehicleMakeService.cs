@@ -21,12 +21,14 @@ namespace VehicleManager.Service
             return await _vehicleMakeRepository.Add(_mapper.Map<VehicleMake>(vehicleMakeDto));
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             if(!await _vehicleMakeRepository.Delete(id))
             {
-                throw new Exception($"Deleting Vehicle make with id {id} failed");
+                return false;
             }
+
+            return true;
         }
 
         public async Task<List<VehicleMakeDto>> GetAll()
