@@ -1,0 +1,37 @@
+﻿@{
+	ViewData["Title"] = "Add vehicle model";
+}
+@model List<VehicleManager.DTO.VehicleMakeDto>
+
+
+<div class="container mt-5">
+    <h2>Vehicle model form</h2>
+    <hr/>
+    <form asp-controller="Home" asp-action="AddVehicleModel">
+        <div class="col">
+
+            <div class="col-md-6">
+                <label>Select Vehicle Make:</label>
+                <select name="VehicleMakeId" class="form-control col-md-6" required>
+                    <option value="">-- Select --</option>
+                    @foreach (var item in Model)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label>Name</label>
+                <input name="Name" type="text" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label>Abrv</label>
+                <input name="Abrv" type="text" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-4">Add model</button>
+        </div>
+    </form>
+</div>

@@ -4,7 +4,7 @@ namespace VehicleManager.Service
 {
     public interface IVehicleModelService
     {
-        public Task<int> Add(VehicleModelDto vehicleModelDto);
+        public Task<int> Add(CreateModelRequest request);
         public Task<VehicleModelDto> GetById(int id);
         public Task<List<VehicleModelDto>> GetAll();
         public Task<PagedResult<VehicleModelDto>> GetPaged(int pageNumber, int pageSize);

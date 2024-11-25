@@ -17,16 +17,16 @@ namespace VehicleManager.Service
             _mapper = mapper;
         }
 
-        public async Task<int> Add(VehicleModelDto vehicleModelDto)
+        public async Task<int> Add(CreateModelRequest request)
         {
-            var vehicleMake = await _vehicleMakeRepository.GetById(vehicleModelDto.VehicleMakeId);
+            var vehicleMake = await _vehicleMakeRepository.GetById(request.VehicleMakeId);
 
             if(vehicleMake == null)
             {
-                throw new Exception($"Vehicle make with id {vehicleModelDto.VehicleMakeId} does not exist.");
+                throw new Exception($"Vehicle make with id {request.VehicleMakeId} does not exist.");
             }
 
-            VehicleModel vehicleModel = _mapper.Map<VehicleModel>(vehicleModelDto);
+            VehicleModel vehicleModel = _mapper.Map<VehicleModel>(request);
             vehicleModel.VehicleMake = vehicleMake;
 
             return await _vehicleModelRepository.Add(vehicleModel);

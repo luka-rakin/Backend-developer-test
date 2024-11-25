@@ -11,11 +11,13 @@ namespace VehicleManager.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IVehicleMakeService _vehicleMakeService;
+        private readonly IVehicleModelService _vehicleModelService;
 
-        public HomeController(ILogger<HomeController> logger, IVehicleMakeService vehicleMakeService)
+        public HomeController(ILogger<HomeController> logger, IVehicleMakeService vehicleMakeService, IVehicleModelService vehicleModelService)
         {
             _logger = logger;
             _vehicleMakeService = vehicleMakeService;
+            _vehicleModelService = vehicleModelService;
         }
 
 
@@ -25,15 +27,29 @@ namespace VehicleManager.Controllers
             return View(allVehicleMakes);
         }
 
-        public IActionResult VehicleModel()
+        public async Task<IActionResult> VehicleModel()
         {
-            return View();
+            var vehicleModels = await _vehicleModelService.GetAll();
+            return View(vehicleModels);
         }
 
         public IActionResult VehicleMakeForm()
         {
             return View();
         }
+
+        public async Task<IActionResult> VehicleModelForm()
+        {
+            var model = await _vehicleMakeService.GetAll();
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddVehicleModel(CreateModelRequest request)
+        {
+            await _vehicleModelService.Add(request);
+            return RedirectToAction("VehicleModel");
+        }
+
 
         public async Task<IActionResult> AddVehicleMake(VehicleMakeDto model)
         {

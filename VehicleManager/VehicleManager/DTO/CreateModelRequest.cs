@@ -2,11 +2,10 @@
 
 namespace VehicleManager.DTO
 {
-    public class VehicleModelDto
+    public class CreateModelRequest
     {
-        public int Id { get; set; }
+        public int VehicleMakeId { get; set; }
         public string Name { get; set; }
-        public string Make {  get; set; }
         public string Abrv { get; set; }
     }
 }

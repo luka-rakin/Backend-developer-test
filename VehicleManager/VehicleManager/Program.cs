@@ -17,7 +17,10 @@ builder.Host.UseServiceProviderFactory(new NinjectServiceProviderFactory(kernel 
 {
 
     kernel.Bind<IVehicleMakeRepository>().To<VehicleMakeRepository>().InRequestScope();
+    kernel.Bind<IVehicleModelRepository>().To<VehicleModelRepository>().InRequestScope();
+
     kernel.Bind<IVehicleMakeService>().To<VehicleMakeService>().InRequestScope();
+    kernel.Bind<IVehicleModelService>().To<VehicleModelService>().InRequestScope();
 }));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
