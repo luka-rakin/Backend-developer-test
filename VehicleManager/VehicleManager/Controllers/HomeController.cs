@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using VehicleManager.DTO;
 using VehicleManager.Enums;
 using VehicleManager.Models;
@@ -36,11 +37,14 @@ namespace VehicleManager.Controllers
             
         }
 
-        public async Task<IActionResult> VehicleModel(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
+        public async Task<IActionResult> VehicleModel(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc", int? makeId = null)
         {
             if (Enum.TryParse(sortBy, out ModelSortOptions modelSortOption))
             {
-                var pagedVehicleModels = await _vehicleModelService.GetPaged(pageNumber, pageSize, modelSortOption);
+                var pagedVehicleModels = await _vehicleModelService.GetPaged(pageNumber, pageSize, modelSortOption, makeId);
+                var vehicleMakes = await _vehicleMakeService.GetAll();
+
+                ViewBag.VehicleMakes = new SelectList(vehicleMakes, "Id", "Name");
                 return View(pagedVehicleModels);
             }
             else

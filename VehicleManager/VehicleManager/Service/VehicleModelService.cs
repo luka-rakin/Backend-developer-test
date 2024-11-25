@@ -54,9 +54,9 @@ namespace VehicleManager.Service
             return _mapper.Map<VehicleModelDto>(vehicleModel);
         }
 
-        public async Task<PagedResult<VehicleModelDto>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOptions)
+        public async Task<PagedResult<VehicleModelDto>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOptions, int? makeId = null)
         {
-            var result = await _vehicleModelRepository.GetPaged(pageNumber, pageSize, sortOptions);
+            var result = await _vehicleModelRepository.GetPaged(pageNumber, pageSize, sortOptions, makeId);
             List<VehicleModelDto> vehicleModelDtos = _mapper.Map<List<VehicleModelDto>>(result.Items);
 
 

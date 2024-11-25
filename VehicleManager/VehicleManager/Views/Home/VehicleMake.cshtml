@@ -23,7 +23,6 @@
 
         <!-- Form for sorting -->
         <form asp-action="VehicleMake" method="get" class="d-flex align-items-center">
-            <label for="sortBy" class="form-label me-2">Sort by:</label>
             <select id="sortBy" name="sortBy" class="form-select w-auto d-inline" onchange="this.form.submit()">
                 @foreach (var option in sortOptions)
                 {
@@ -63,7 +62,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Abr</th>
+                    <th>Abrv</th>
                 </tr>
             </thead>
             <tbody>

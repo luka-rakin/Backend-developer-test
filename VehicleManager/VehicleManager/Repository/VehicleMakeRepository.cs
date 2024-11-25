@@ -54,49 +54,27 @@ namespace VehicleManager.Repository
 
         public async Task<PagedResult<VehicleMake>> GetPaged(int pageNumber, int pageSize, MakeSortOptions sortOption)
         {
-            int totalCount = _context.vehicleMakes.Count();
-
             if(pageNumber < 1)
             {
                 pageNumber = 1;
             }
 
-            List<VehicleMake> vehicleMakes = new List<VehicleMake>();
+            IQueryable<VehicleMake> query = _context.vehicleMakes;
 
-            switch (sortOption)
+            query = sortOption switch
             {
-                case MakeSortOptions.NameDesc:
-                    vehicleMakes = await _context.vehicleMakes
-                        .OrderByDescending(v => v.Name)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToListAsync();
-                    break;
+                MakeSortOptions.NameDesc => query.OrderByDescending(v => v.Name),
+                MakeSortOptions.AbrvAsc => query.OrderBy(v => v.Abrv),
+                MakeSortOptions.AbrvDesc => query.OrderByDescending(v => v.Abrv),
+                _ => query.OrderBy(v => v.Name)
+            };
 
-                case MakeSortOptions.AbrvAsc:
-                    vehicleMakes = await _context.vehicleMakes
-                        .OrderBy (v => v.Abrv)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToListAsync();
-                break;
+            int totalCount = await query.CountAsync();
 
-                case MakeSortOptions.AbrvDesc:
-                    vehicleMakes = await _context.vehicleMakes
-                        .OrderByDescending(v => v.Abrv)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToListAsync();
-                    break;
-
-                default:
-                    vehicleMakes = await _context.vehicleMakes
-                        .OrderBy(v => v.Name)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToListAsync();
-                    break;
-            }
+            var vehicleMakes = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
