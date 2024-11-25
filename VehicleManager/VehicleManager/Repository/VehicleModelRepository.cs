@@ -88,10 +88,22 @@ namespace VehicleManager.Repository
         }
 
 
-        
-        //public Task<bool> Update(int id, VehicleModel VehicleModel)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
+        public async Task<bool> Update(int id, VehicleModel VehicleModel)
+        {
+            var existingVehicleModel = await _context.vehicleModels.Include(vm => vm.VehicleMake).FirstOrDefaultAsync(vm => vm.Id == id);
+
+            if (existingVehicleModel == null)
+            {
+                return false;
+            }
+
+            existingVehicleModel.Name = VehicleModel.Name;
+            existingVehicleModel.Abrv = VehicleModel.Abrv;
+
+            _context.vehicleModels.Update(existingVehicleModel);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

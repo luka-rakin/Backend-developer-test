@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using VehicleManager.DTO;
 using VehicleManager.Enums;
+using VehicleManager.Models;
 using VehicleManager.Service;
 
 namespace VehicleManager.Controllers
@@ -107,6 +108,38 @@ namespace VehicleManager.Controllers
                 //TempData["ErrorMessage"] = $"An unexpected error occured.";
                 //return View("~/Views/Shared/ErrorPage.cshtml");
 
+                return StatusCode(500, new { Message = "An unexpected error occured." });
+            }
+            
+        }
+
+        public async Task<IActionResult> EditVehicleModelForm(int id)
+        {
+            try
+            {
+                var vehicleModel = await _vehicleModelService.GetById(id);
+                return View(vehicleModel);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An unexpected error occured." });
+            }
+            
+        }
+
+        public async Task<IActionResult> EditVehicleModelSubmit(VehicleModelDto vehicleModelDto)
+        {
+            try
+            {
+                await _vehicleModelService.Update(vehicleModelDto.Id, vehicleModelDto);
+                return RedirectToAction("VehicleModel");
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, new { Message = "An unexpected error occured." });
             }
             

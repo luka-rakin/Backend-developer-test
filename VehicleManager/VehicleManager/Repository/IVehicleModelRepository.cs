@@ -10,7 +10,7 @@ namespace VehicleManager.Repository
         public Task<VehicleModel> GetById(int id);
         public Task<List<VehicleModel>> GetAll();
         public Task<PagedResult<VehicleModel>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOption, int? makeId);
-        //public Task<bool> Update(int id, VehicleModel VehicleModel);
+        public Task<bool> Update(int id, VehicleModel VehicleModel);
         public Task<bool> Delete(int id);
     }
 }

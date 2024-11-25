@@ -47,6 +47,10 @@ namespace VehicleManager.Service
         public async Task<VehicleModelDto> GetById(int id)
         {
             var vehicleModel = await _vehicleModelRepository.GetById(id);
+            if(vehicleModel == null)
+            {
+                throw new BadHttpRequestException("Vehicle model with given id does not exist.");
+            }
             return _mapper.Map<VehicleModelDto>(vehicleModel);
         }
 
@@ -67,10 +71,13 @@ namespace VehicleManager.Service
         }
 
 
-        
-        //public Task Update(int id, VehicleModelDto vehicleModelDto)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
+        public async Task Update(int id, VehicleModelDto vehicleModelDto)
+        {
+            if(!await _vehicleModelRepository.Update(id, _mapper.Map<VehicleModel>(vehicleModelDto)))
+            {
+                throw new Exception("Update of Vehicle model failed.");
+            }
+        }
     }
 }

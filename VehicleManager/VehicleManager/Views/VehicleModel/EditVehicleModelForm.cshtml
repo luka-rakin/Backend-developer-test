@@ -1,0 +1,31 @@
+﻿@{
+	ViewData["Title"] = "Edit vehicle model";
+}
+@model VehicleManager.DTO.VehicleModelDto
+
+
+<div class="container mt-5">
+    <h2>Edit vehicle model</h2>
+    <hr />
+    <form asp-controller="VehicleModel" asp-action="EditVehicleModelSubmit">
+        <div class="col">
+            <input type="hidden" value="@Model.Id" asp-for="Id" />
+            <div class="col-md-6">
+                <label for="make">Vehicle Make:</label>
+                <input type="text" id="make" class="form-control" disabled value="@Model.Make" asp-for="Make"/>
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label>Name</label>
+                <input type="text" class="form-control" value="@Model.Name" asp-for="Name" required>
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label>Abrv</label>
+                <input type="text" class="form-control" value="@Model.Abrv" asp-for="Abrv" required>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-4">Submit</button>
+        </div>
+    </form>
+</div>

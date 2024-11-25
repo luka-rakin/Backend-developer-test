@@ -119,6 +119,12 @@
                             <td>@vehicleModel.Make</td>
                             <td>@vehicleModel.Abrv</td>
                             <td>
+                                <form asp-asp-controller="VehicleModel" asp-action="EditVehicleModelForm">
+                                    <input type="hidden" name="id" value="@vehicleModel.Id" />
+                                    <button type="submit" class="btn alert-primary">Edit</button>
+                                </form>
+                            </td>
+                            <td>
                                 <form asp-asp-controller="VehicleModel" asp-action="DeleteVehicleModel">
                                     <input type="hidden" name="id" value="@vehicleModel.Id"/>
                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -149,7 +155,7 @@
                 }
 
                 <!-- Next Button -->
-                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages || Model.Items.Count == 0 ? "disabled" : "")">
                     <a class="page-link" asp-action="VehicleModel" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-pageSize="@Model.PageSize" asp-route-sortBy="@selectedSortBy">Next</a>
                 </li>
             </ul>

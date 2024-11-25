@@ -91,5 +91,37 @@ namespace VehicleManager.Controllers
             
 
         }
+
+        public async Task<IActionResult> EditVehicleMakeForm(int id)
+        {
+            try
+            {
+                var vehicleMake = await _vehicleMakeService.GetById(id);
+                return View(vehicleMake);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { Message = "An unexpected error occured." });
+            }
+            
+        }
+
+        public async Task<IActionResult> EditVehicleMakeSubmit(VehicleMakeDto vehicleMakeDto)
+        {
+            try
+            {
+                await _vehicleMakeService.Update(vehicleMakeDto.Id, vehicleMakeDto);
+                return RedirectToAction("VehicleMake");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An unexpected error occured." });
+            }
+            
+        }
     }
 }

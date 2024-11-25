@@ -13,6 +13,8 @@ namespace VehicleManager.Profiles
                 .ForMember(dest => dest.Make, src => src.MapFrom(x => x.VehicleMake.Name));
 
             CreateMap<CreateModelRequest, VehicleModel>();
+
+            CreateMap<VehicleModelDto, VehicleModel>();
         }
     }
 }
