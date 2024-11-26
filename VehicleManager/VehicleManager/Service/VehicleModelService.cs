@@ -49,7 +49,7 @@ namespace VehicleManager.Service
             var vehicleModel = await _vehicleModelRepository.GetById(id);
             if(vehicleModel == null)
             {
-                throw new BadHttpRequestException("Vehicle model with given id does not exist.");
+                throw new KeyNotFoundException("Vehicle model with given id does not exist.");
             }
             return _mapper.Map<VehicleModelDto>(vehicleModel);
         }

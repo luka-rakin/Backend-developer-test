@@ -120,7 +120,7 @@ namespace VehicleManager.Controllers
                 var vehicleModel = await _vehicleModelService.GetById(id);
                 return View(vehicleModel);
             }
-            catch (BadHttpRequestException ex)
+            catch (KeyNotFoundException ex)
             {
                 return BadRequest(ex.Message);
             }
