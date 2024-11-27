@@ -5,6 +5,7 @@ using VehicleManager.Services.Dtos;
 using VehicleManager.Services.Enums;
 using VehicleManager.Services.Service;
 using VehicleManager.Models;
+using System.Globalization;
 
 namespace VehicleManager.Controllers
 {
@@ -20,13 +21,71 @@ namespace VehicleManager.Controllers
             _vehicleMakeService = vehicleMakeService;
             _mapper = mapper;
         }
-        public async Task<IActionResult> VehicleMake(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
+        //public async Task<IActionResult> VehicleMake(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
+        //{
+        //    try
+        //    {
+        //        if (Enum.TryParse(sortBy, out MakeSortOptions makeSortOption))
+        //        {
+        //            var pagedVehicleMakes = await _vehicleMakeService.GetPaged(pageNumber, pageSize, makeSortOption);
+
+        //            var vehicleMakeViewModels = _mapper.Map<List<VehicleMakeViewModel>>(pagedVehicleMakes.Items);
+
+        //            PagedResultViewModel<VehicleMakeViewModel> pagedResultViewModel = new PagedResultViewModel<VehicleMakeViewModel>
+        //            {
+        //                Items = vehicleMakeViewModels,
+        //                TotalCount = pagedVehicleMakes.TotalCount,
+        //                CurrentPage = pageNumber,
+        //                PageSize = pageSize,
+        //                TotalPages = (int)Math.Ceiling(pagedVehicleMakes.TotalCount / (double)pageSize),
+        //            };
+
+        //            return View(pagedResultViewModel);
+        //        }
+        //        else
+        //        {
+        //            //TempData["ErrorMessage"] = $"Error: Unsuported sorting value";
+        //            //return View("~/Views/Shared/ErrorPage.cshtml");
+
+        //            return BadRequest(new { Message = "Unsupported sorting value." });
+        //        }
+        //    }
+        //    catch (Exception ex) {
+        //        //TempData["ErrorMessage"] = $"An unexpected error occured.";
+        //        //return View("~/Views/Shared/ErrorPage.cshtml");
+
+        //        return StatusCode(500, new { Message = "An unexpected error occured." });
+        //    }
+
+
+        //}
+
+        public async Task<IActionResult> VehicleMake(MakeDisplayViewModel viewModel)
         {
             try
             {
-                if (Enum.TryParse(sortBy, out MakeSortOptions makeSortOption))
+                if (TempData["CurrentPage"] != null)
                 {
-                    var pagedVehicleMakes = await _vehicleMakeService.GetPaged(pageNumber, pageSize, makeSortOption);
+                    viewModel.PagedResultViewModel.CurrentPage = (int)TempData["CurrentPage"];
+                    TempData["CurrentPage"] = null;
+                }
+                    
+                
+                if (TempData["PageSize"] != null)
+                {
+                    viewModel.PagedResultViewModel.PageSize = (int)TempData["PageSize"];
+                    TempData["PageSize"] = null;
+                }
+                if (TempData["SortBy"] != null)
+                {
+                    viewModel.SortBy = TempData["SortBy"].ToString();
+                    TempData["SortBy"] = null;
+                }
+
+
+                if (Enum.TryParse(viewModel.SortBy, out MakeSortOptions makeSortOption))
+                {
+                    var pagedVehicleMakes = await _vehicleMakeService.GetPaged(viewModel.PagedResultViewModel.CurrentPage, viewModel.PagedResultViewModel.PageSize, makeSortOption);
 
                     var vehicleMakeViewModels = _mapper.Map<List<VehicleMakeViewModel>>(pagedVehicleMakes.Items);
 
@@ -34,12 +93,14 @@ namespace VehicleManager.Controllers
                     {
                         Items = vehicleMakeViewModels,
                         TotalCount = pagedVehicleMakes.TotalCount,
-                        CurrentPage = pageNumber,
-                        PageSize = pageSize,
-                        TotalPages = (int)Math.Ceiling(pagedVehicleMakes.TotalCount / (double)pageSize),
+                        CurrentPage = viewModel.PagedResultViewModel.CurrentPage,
+                        PageSize = viewModel.PagedResultViewModel.PageSize,
+                        TotalPages = (int)Math.Ceiling(pagedVehicleMakes.TotalCount / (double)viewModel.PagedResultViewModel.PageSize),
                     };
 
-                    return View(pagedResultViewModel);
+                    viewModel.PagedResultViewModel = pagedResultViewModel;
+
+                    return View(viewModel);
                 }
                 else
                 {
@@ -49,13 +110,14 @@ namespace VehicleManager.Controllers
                     return BadRequest(new { Message = "Unsupported sorting value." });
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 //TempData["ErrorMessage"] = $"An unexpected error occured.";
                 //return View("~/Views/Shared/ErrorPage.cshtml");
 
                 return StatusCode(500, new { Message = "An unexpected error occured." });
             }
-            
+
 
         }
 
@@ -140,5 +202,17 @@ namespace VehicleManager.Controllers
             }
             
         }
+
+        public async Task<IActionResult> ChangePage(int pageNumber, int pageSize, string sortBy)
+        {
+            TempData["CurrentPage"] = pageNumber;
+            TempData["PageSize"] = pageSize;
+            TempData["SortBy"] = sortBy;
+
+            return RedirectToAction("VehicleMake");
+
+        }
+
+
     }
 }
