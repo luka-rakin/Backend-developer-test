@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using VehicleManager.DTO;
 using VehicleManager.Services.Dtos;
 using VehicleManager.Services.Enums;
 using VehicleManager.Services.Service;
@@ -21,44 +20,6 @@ namespace VehicleManager.Controllers
             _vehicleMakeService = vehicleMakeService;
             _mapper = mapper;
         }
-        //public async Task<IActionResult> VehicleMake(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
-        //{
-        //    try
-        //    {
-        //        if (Enum.TryParse(sortBy, out MakeSortOptions makeSortOption))
-        //        {
-        //            var pagedVehicleMakes = await _vehicleMakeService.GetPaged(pageNumber, pageSize, makeSortOption);
-
-        //            var vehicleMakeViewModels = _mapper.Map<List<VehicleMakeViewModel>>(pagedVehicleMakes.Items);
-
-        //            PagedResultViewModel<VehicleMakeViewModel> pagedResultViewModel = new PagedResultViewModel<VehicleMakeViewModel>
-        //            {
-        //                Items = vehicleMakeViewModels,
-        //                TotalCount = pagedVehicleMakes.TotalCount,
-        //                CurrentPage = pageNumber,
-        //                PageSize = pageSize,
-        //                TotalPages = (int)Math.Ceiling(pagedVehicleMakes.TotalCount / (double)pageSize),
-        //            };
-
-        //            return View(pagedResultViewModel);
-        //        }
-        //        else
-        //        {
-        //            //TempData["ErrorMessage"] = $"Error: Unsuported sorting value";
-        //            //return View("~/Views/Shared/ErrorPage.cshtml");
-
-        //            return BadRequest(new { Message = "Unsupported sorting value." });
-        //        }
-        //    }
-        //    catch (Exception ex) {
-        //        //TempData["ErrorMessage"] = $"An unexpected error occured.";
-        //        //return View("~/Views/Shared/ErrorPage.cshtml");
-
-        //        return StatusCode(500, new { Message = "An unexpected error occured." });
-        //    }
-
-
-        //}
 
         public async Task<IActionResult> VehicleMake(MakeDisplayViewModel viewModel)
         {

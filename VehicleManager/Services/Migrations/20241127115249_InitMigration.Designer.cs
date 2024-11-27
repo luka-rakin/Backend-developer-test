@@ -11,7 +11,7 @@ using VehicleManager.Services;
 namespace VehicleManager.Services.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241127080051_InitMigration")]
+    [Migration("20241127115249_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
