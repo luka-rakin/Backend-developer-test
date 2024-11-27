@@ -1,23 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using VehicleManager.DTO;
-using VehicleManager.Enums;
+using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Enums;
+using VehicleManager.Services.Service;
 using VehicleManager.Models;
-using VehicleManager.Service;
 
 namespace VehicleManager.Controllers
 {
     public class VehicleModelController : Controller
     {
         private readonly ILogger<VehicleModelController> _logger;
+        private readonly IMapper _mapper;
         private readonly IVehicleModelService _vehicleModelService;
         private readonly IVehicleMakeService _vehicleMakeService;
 
-        public VehicleModelController(ILogger<VehicleModelController> logger, IVehicleModelService vehicleModelService, IVehicleMakeService vehicleMakeService)
+        public VehicleModelController(ILogger<VehicleModelController> logger, IVehicleModelService vehicleModelService, IVehicleMakeService vehicleMakeService, IMapper mapper)
         {
             _logger = logger;
             _vehicleModelService = vehicleModelService;
             _vehicleMakeService = vehicleMakeService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> VehicleModel(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc", int? makeId = null)
@@ -30,8 +33,19 @@ namespace VehicleManager.Controllers
                     var pagedVehicleModels = await _vehicleModelService.GetPaged(pageNumber, pageSize, modelSortOption, makeId);
                     var vehicleMakes = await _vehicleMakeService.GetAll();
 
-                    ViewBag.VehicleMakes = new SelectList(vehicleMakes, "Id", "Name");
-                    return View(pagedVehicleModels);
+                    var vehicleModelViewModels = _mapper.Map<List<VehicleModelViewModel>>(pagedVehicleModels.Items);
+
+                    PagedResultViewModel<VehicleModelViewModel> pagedResultViewModel = new PagedResultViewModel<VehicleModelViewModel>
+                    {
+                        Items = vehicleModelViewModels,
+                        TotalCount = pagedVehicleModels.TotalCount,
+                        CurrentPage = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(pagedVehicleModels.TotalCount / (double)pageSize),
+                    };
+
+                    ViewBag.VehicleMakes = new SelectList(_mapper.Map<List<VehicleMakeViewModel>>(vehicleMakes), "Id", "Name");
+                    return View(pagedResultViewModel);
                 }
                 else
                 {
@@ -55,8 +69,12 @@ namespace VehicleManager.Controllers
         {
             try
             {
-                var model = await _vehicleMakeService.GetAll();
-                return View(model);
+                var vehicleMakes = await _vehicleMakeService.GetAll();
+                var viewModel = new CreateModelViewModel
+                {
+                    VehicleMakes = _mapper.Map<List<VehicleMakeViewModel>>(vehicleMakes)
+                };
+                return View(viewModel);
             }
             catch (Exception ex)
             {
@@ -69,11 +87,11 @@ namespace VehicleManager.Controllers
             
         }
 
-        public async Task<IActionResult> AddVehicleModel(CreateModelRequest request)
+        public async Task<IActionResult> AddVehicleModel(CreateModelViewModel viewModel)
         {
             try
             {
-                await _vehicleModelService.Add(request);
+                await _vehicleModelService.Add(_mapper.Map<CreateModelRequest>(viewModel));
                 return RedirectToAction("VehicleModel");
             }
             catch (Exception ex)
@@ -118,7 +136,7 @@ namespace VehicleManager.Controllers
             try
             {
                 var vehicleModel = await _vehicleModelService.GetById(id);
-                return View(vehicleModel);
+                return View(_mapper.Map<VehicleModelViewModel>(vehicleModel));
             }
             catch (KeyNotFoundException ex)
             {
@@ -131,11 +149,11 @@ namespace VehicleManager.Controllers
             
         }
 
-        public async Task<IActionResult> EditVehicleModelSubmit(VehicleModelDto vehicleModelDto)
+        public async Task<IActionResult> EditVehicleModelSubmit(VehicleModelViewModel viewModel)
         {
             try
             {
-                await _vehicleModelService.Update(vehicleModelDto.Id, vehicleModelDto);
+                await _vehicleModelService.Update(viewModel.Id, _mapper.Map<EditModelRequest>(viewModel));
                 return RedirectToAction("VehicleModel");
             }
             catch (Exception ex)

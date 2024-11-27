@@ -1,11 +1,10 @@
 ﻿namespace VehicleManager.Models
 {
-    public class VehicleModel
+    public class VehicleModelViewModel
     {
         public int Id { get; set; }
-        public VehicleMake VehicleMake { get; set; }
-        public int VehicleMakeId { get; set; }
         public string Name { get; set; }
+        public string Make { get; set; }
         public string Abrv { get; set; }
     }
 }

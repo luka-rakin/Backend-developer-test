@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using VehicleManager.DTO;
+using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Models;
 using VehicleManager.Models;
 
 namespace VehicleManager.Profiles
@@ -14,7 +16,13 @@ namespace VehicleManager.Profiles
 
             CreateMap<CreateModelRequest, VehicleModel>();
 
-            CreateMap<VehicleModelDto, VehicleModel>();
+            CreateMap<VehicleModel, VehicleModelViewModel>()
+                .ForMember(dest => dest.Make, src => src.MapFrom(x => x.VehicleMake.Name));
+
+            CreateMap<CreateModelViewModel, CreateModelRequest>();
+            CreateMap<EditModelViewModel, EditModelRequest>();
+            CreateMap<VehicleModelViewModel, EditModelRequest>();
+
         }
     }
 }

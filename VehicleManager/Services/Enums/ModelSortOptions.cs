@@ -1,4 +1,4 @@
-﻿namespace VehicleManager.Enums
+﻿namespace VehicleManager.Services.Enums
 {
     public enum ModelSortOptions
     {

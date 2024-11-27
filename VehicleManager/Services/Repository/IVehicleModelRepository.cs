@@ -1,8 +1,10 @@
-﻿using VehicleManager.DTO;
-using VehicleManager.Enums;
-using VehicleManager.Models;
+﻿
+using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Enums;
+using VehicleManager.Services.Generics;
+using VehicleManager.Services.Models;
 
-namespace VehicleManager.Repository
+namespace VehicleManager.Services.Repository
 {
     public interface IVehicleModelRepository
     {
@@ -10,7 +12,7 @@ namespace VehicleManager.Repository
         public Task<VehicleModel> GetById(int id);
         public Task<List<VehicleModel>> GetAll();
         public Task<PagedResult<VehicleModel>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOption, int? makeId);
-        public Task<bool> Update(int id, VehicleModel VehicleModel);
+        public Task<bool> Update(int id, EditModelRequest request);
         public Task<bool> Delete(int id);
     }
 }

@@ -1,7 +1,7 @@
 ﻿@{
 	ViewData["Title"] = "Add vehicle model";
 }
-@model List<VehicleManager.DTO.VehicleMakeDto>
+@model VehicleManager.Models.CreateModelViewModel
 
 
 <div class="container mt-5">
@@ -12,9 +12,10 @@
 
             <div class="col-md-6">
                 <label>Select Vehicle Make:</label>
-                <select name="VehicleMakeId" class="form-control col-md-6" required>
+                @* <select name="VehicleMakeId" class="form-control col-md-6" required> *@
+                <select asp-for="VehicleMakeId" class="form-control col-md-6" required>
                     <option value="">-- Select --</option>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.VehicleMakes)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }

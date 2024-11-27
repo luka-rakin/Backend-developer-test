@@ -1,6 +1,6 @@
 ﻿namespace VehicleManager.Models
 {
-    public class VehicleMake
+    public class EditModelViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

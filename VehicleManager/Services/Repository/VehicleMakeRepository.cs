@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
-using VehicleManager.DTO;
-using VehicleManager.Enums;
-using VehicleManager.Models;
+using VehicleManager.Services;
+using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Enums;
+using VehicleManager.Services.Generics;
+using VehicleManager.Services.Models;
+using VehicleManager.Services.Repository;
 
-namespace VehicleManager.Repository
+
+namespace VehicleManager.Services.Repository
 {
     public class VehicleMakeRepository : IVehicleMakeRepository
     {
@@ -83,19 +86,14 @@ namespace VehicleManager.Repository
                 .Take(pageSize)
                 .ToListAsync();
 
-            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-
             return new PagedResult<VehicleMake>
             {
                 Items = vehicleMakes,
-                TotalPages = totalPages,
-                TotalCount = totalCount,
-                CurrentPage = pageNumber,
-                PageSize = pageSize
+                TotalCount = totalCount
             };       
         }
 
-        public async Task<bool> Update(int id, VehicleMake vehicleMake)
+        public async Task<bool> Update(int id, EditMakeRequest request)
         {
             var existingVehicleMake = await _context.vehicleMakes.FirstOrDefaultAsync(v => v.Id == id);
 
@@ -104,8 +102,8 @@ namespace VehicleManager.Repository
                 return false;
             }
 
-            existingVehicleMake.Name = vehicleMake.Name;
-            existingVehicleMake.Abrv = vehicleMake.Abrv;
+            existingVehicleMake.Name = request.Name;
+            existingVehicleMake.Abrv = request.Abrv;
 
             _context.vehicleMakes.Update(existingVehicleMake);
             await _context.SaveChangesAsync();

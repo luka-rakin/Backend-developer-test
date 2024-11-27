@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Ninject;
 using Ninject.Extensions.DependencyInjection;
 using Ninject.Web.Common;
-using VehicleManager;
-using VehicleManager.Repository;
-using VehicleManager.Service;
+using VehicleManager.Services;
+using VehicleManager.Services.Repository;
+using VehicleManager.Services.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -13,7 +13,17 @@ To ćete uraditi tako što ćete dodati sledeće u appsettings.json fajl:
 
 Umesto _YourConnectionString_ dodati pravi Connection string.
 
-Nakon ovoga potrebno je pokrenuti migracije i update baze podataka.
+Nakon ovoga potrebno je pokrenuti migracije,
+
+```
+Add-Migration InitMigration -Project VehicleManager.Services -StartupProject VehicleManager
+```
+
+a zatim i update baze podataka.
+
+```
+Update-database
+```
 
 ## Kako koristiti aplikaciju
 

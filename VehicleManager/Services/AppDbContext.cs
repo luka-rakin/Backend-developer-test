@@ -1,12 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VehicleManager.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using VehicleManager.Services.Models;
 
-namespace VehicleManager
+namespace VehicleManager.Services
 {
     public class AppDbContext : DbContext
     {
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
 
         }
 
@@ -25,6 +30,5 @@ namespace VehicleManager
                 .HasForeignKey(vm => vm.VehicleMakeId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-
     }
 }

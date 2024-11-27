@@ -1,21 +1,20 @@
-﻿using AutoMapper;
-using VehicleManager.DTO;
-using VehicleManager.Enums;
-using VehicleManager.Models;
-using VehicleManager.Repository;
+﻿using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Enums;
+using VehicleManager.Services.Generics;
+using VehicleManager.Services.Models;
+using VehicleManager.Services.Repository;
 
-namespace VehicleManager.Service
+namespace VehicleManager.Services.Service
 {
     public class VehicleModelService : IVehicleModelService
     {
         private readonly IVehicleModelRepository _vehicleModelRepository;
         private readonly IVehicleMakeRepository _vehicleMakeRepository;
-        private readonly IMapper _mapper;
-        public VehicleModelService(IVehicleModelRepository vehicleModelRepository, IVehicleMakeRepository vehicleMakeRepository, IMapper mapper)
+
+        public VehicleModelService(IVehicleModelRepository vehicleModelRepository, IVehicleMakeRepository vehicleMakeRepository)
         {
             _vehicleModelRepository = vehicleModelRepository;
             _vehicleMakeRepository = vehicleMakeRepository;
-            _mapper = mapper;
         }
 
         public async Task<int> Add(CreateModelRequest request)
@@ -27,8 +26,12 @@ namespace VehicleManager.Service
                 throw new Exception($"Vehicle make with id {request.VehicleMakeId} does not exist.");
             }
 
-            VehicleModel vehicleModel = _mapper.Map<VehicleModel>(request);
-            vehicleModel.VehicleMake = vehicleMake;
+            VehicleModel vehicleModel = new VehicleModel
+            {
+                Name = request.Name,
+                Abrv = request.Abrv,
+                VehicleMake = vehicleMake,
+            };
 
             return await _vehicleModelRepository.Add(vehicleModel);
         }
@@ -38,43 +41,33 @@ namespace VehicleManager.Service
             return await _vehicleModelRepository.Delete(id);
         }
 
-        public async Task<List<VehicleModelDto>> GetAll()
+        public async Task<List<VehicleModel>> GetAll()
         {
             var vehicleModels = await _vehicleModelRepository.GetAll();
-            return _mapper.Map<List<VehicleModelDto>>(vehicleModels);
+            return vehicleModels;
         }
 
-        public async Task<VehicleModelDto> GetById(int id)
+        public async Task<VehicleModel> GetById(int id)
         {
             var vehicleModel = await _vehicleModelRepository.GetById(id);
             if(vehicleModel == null)
             {
                 throw new KeyNotFoundException("Vehicle model with given id does not exist.");
             }
-            return _mapper.Map<VehicleModelDto>(vehicleModel);
+            return vehicleModel;
         }
 
-        public async Task<PagedResult<VehicleModelDto>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOptions, int? makeId = null)
+        public async Task<PagedResult<VehicleModel>> GetPaged(int pageNumber, int pageSize, ModelSortOptions sortOptions, int? makeId = null)
         {
             var result = await _vehicleModelRepository.GetPaged(pageNumber, pageSize, sortOptions, makeId);
-            List<VehicleModelDto> vehicleModelDtos = _mapper.Map<List<VehicleModelDto>>(result.Items);
-
-
-            return new PagedResult<VehicleModelDto>
-            {
-                Items = vehicleModelDtos,
-                TotalCount = result.TotalCount,
-                TotalPages = result.TotalPages,
-                CurrentPage = result.CurrentPage,
-                PageSize = result.PageSize
-            };
+            return result;
         }
 
 
 
-        public async Task Update(int id, VehicleModelDto vehicleModelDto)
+        public async Task Update(int id, EditModelRequest request)
         {
-            if(!await _vehicleModelRepository.Update(id, _mapper.Map<VehicleModel>(vehicleModelDto)))
+            if(!await _vehicleModelRepository.Update(id, request))
             {
                 throw new Exception("Update of Vehicle model failed.");
             }

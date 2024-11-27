@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleManager", "VehicleManager\VehicleManager.csproj", "{370207C0-2E67-46E4-A4C4-78280A4360DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleManager.Services", "Services\VehicleManager.Services.csproj", "{F3D052D8-1060-4074-B4C0-09DF81CFD04C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{370207C0-2E67-46E4-A4C4-78280A4360DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{370207C0-2E67-46E4-A4C4-78280A4360DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{370207C0-2E67-46E4-A4C4-78280A4360DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D052D8-1060-4074-B4C0-09DF81CFD04C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D052D8-1060-4074-B4C0-09DF81CFD04C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D052D8-1060-4074-B4C0-09DF81CFD04C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D052D8-1060-4074-B4C0-09DF81CFD04C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using VehicleManager.DTO;
-using VehicleManager.Enums;
-using VehicleManager.Service;
+using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Enums;
+using VehicleManager.Services.Service;
+using VehicleManager.Models;
 
 namespace VehicleManager.Controllers
 {
@@ -9,11 +12,13 @@ namespace VehicleManager.Controllers
     {
         private readonly ILogger<VehicleMakeController> _logger;
         private readonly IVehicleMakeService _vehicleMakeService;
+        private readonly IMapper _mapper;
 
-        public VehicleMakeController(ILogger<VehicleMakeController> logger, IVehicleMakeService vehicleMakeService)
+        public VehicleMakeController(ILogger<VehicleMakeController> logger, IVehicleMakeService vehicleMakeService, IMapper mapper)
         {
             _logger = logger;
             _vehicleMakeService = vehicleMakeService;
+            _mapper = mapper;
         }
         public async Task<IActionResult> VehicleMake(int pageNumber = 1, int pageSize = 5, string sortBy = "NameAsc")
         {
@@ -22,7 +27,19 @@ namespace VehicleManager.Controllers
                 if (Enum.TryParse(sortBy, out MakeSortOptions makeSortOption))
                 {
                     var pagedVehicleMakes = await _vehicleMakeService.GetPaged(pageNumber, pageSize, makeSortOption);
-                    return View(pagedVehicleMakes);
+
+                    var vehicleMakeViewModels = _mapper.Map<List<VehicleMakeViewModel>>(pagedVehicleMakes.Items);
+
+                    PagedResultViewModel<VehicleMakeViewModel> pagedResultViewModel = new PagedResultViewModel<VehicleMakeViewModel>
+                    {
+                        Items = vehicleMakeViewModels,
+                        TotalCount = pagedVehicleMakes.TotalCount,
+                        CurrentPage = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(pagedVehicleMakes.TotalCount / (double)pageSize),
+                    };
+
+                    return View(pagedResultViewModel);
                 }
                 else
                 {
@@ -47,11 +64,11 @@ namespace VehicleManager.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddVehicleMake(VehicleMakeDto model)
+        public async Task<IActionResult> AddVehicleMake(CreateMakeViewModel viewModel)
         {
             try
             {
-                await _vehicleMakeService.Add(model);
+                await _vehicleMakeService.Add(_mapper.Map<CreateMakeRequest>(viewModel));
                 return RedirectToAction("VehicleMake");
             }
             catch (Exception ex)
@@ -97,7 +114,7 @@ namespace VehicleManager.Controllers
             try
             {
                 var vehicleMake = await _vehicleMakeService.GetById(id);
-                return View(vehicleMake);
+                return View(_mapper.Map<VehicleMakeViewModel>(vehicleMake));
             }
             catch (KeyNotFoundException ex)
             {
@@ -110,11 +127,11 @@ namespace VehicleManager.Controllers
             
         }
 
-        public async Task<IActionResult> EditVehicleMakeSubmit(VehicleMakeDto vehicleMakeDto)
+        public async Task<IActionResult> EditVehicleMakeSubmit(VehicleMakeViewModel viewModel)
         {
             try
             {
-                await _vehicleMakeService.Update(vehicleMakeDto.Id, vehicleMakeDto);
+                await _vehicleMakeService.Update(viewModel.Id, _mapper.Map<EditMakeRequest>(viewModel));
                 return RedirectToAction("VehicleMake");
             }
             catch (Exception ex)

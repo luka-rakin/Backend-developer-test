@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VehicleManager.DTO;
-using VehicleManager.Enums;
-using VehicleManager.Models;
+using VehicleManager.Services;
+using VehicleManager.Services.Dtos;
+using VehicleManager.Services.Enums;
+using VehicleManager.Services.Generics;
+using VehicleManager.Services.Models;
 
-namespace VehicleManager.Repository
+
+namespace VehicleManager.Services.Repository
 {
     public class VehicleModelRepository : IVehicleModelRepository
     {
@@ -75,21 +78,16 @@ namespace VehicleManager.Repository
                 .Take(pageSize)
                 .ToListAsync();
 
-            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-
             return new PagedResult<VehicleModel>
             {
                 Items = vehicleModels,
-                TotalPages = totalPages,
                 TotalCount = totalCount,
-                CurrentPage = pageNumber,
-                PageSize = pageSize
             };
         }
 
 
 
-        public async Task<bool> Update(int id, VehicleModel VehicleModel)
+        public async Task<bool> Update(int id, EditModelRequest request)
         {
             var existingVehicleModel = await _context.vehicleModels.Include(vm => vm.VehicleMake).FirstOrDefaultAsync(vm => vm.Id == id);
 
@@ -98,8 +96,8 @@ namespace VehicleManager.Repository
                 return false;
             }
 
-            existingVehicleModel.Name = VehicleModel.Name;
-            existingVehicleModel.Abrv = VehicleModel.Abrv;
+            existingVehicleModel.Name = request.Name;
+            existingVehicleModel.Abrv = request.Abrv;
 
             _context.vehicleModels.Update(existingVehicleModel);
             await _context.SaveChangesAsync();
